@@ -42,12 +42,20 @@ const KEYWORDS: Record<string, TokenType> = {
 
 
 
-	whatif: TokenType.Let,
-	is: TokenType.Equals,
-	dumbass: TokenType.Semicolon,
+	agar: TokenType.Let,
+	agaragar:TokenType.Const,
+	be: TokenType.Equals,
+	"leh?": TokenType.Semicolon,
 
-	hawk: TokenType.If,
-	tuah: TokenType.Else,
+	"botah,": TokenType.If,
+	"bolampah!": TokenType.Else,
+
+	"walao!!!":TokenType.While,
+
+	"balikkampong!": TokenType.EOF,
+
+	ownself:TokenType.Fn,
+
 };
 
 // Reoresents a single token from the source-code.
@@ -67,6 +75,13 @@ function token(value = "", type: TokenType): Token {
 function isalpha(src: string) {
 	return src.toUpperCase() != src.toLowerCase();
 }
+
+function isIdentifierChar(ch: string): boolean {
+	// You can allow letters, digits, underscores, exclamation, question mark, etc.
+	// For example, let’s include: [a-zA-Z0-9_!]
+	return /[a-zA-Z0-9_!?,]/.test(ch);
+  }
+  
 
 /**
  * Returns true if the character is whitespace like -> [\s, \t, \n]
@@ -165,23 +180,38 @@ export function tokenize(sourceCode: string): Token[] {
 				// append new numeric token.
 				tokens.push(token(num, TokenType.Number));
 			} // Handle Identifier & Keyword Tokens.
-			else if (isalpha(src[0])) {
-				let ident = "";
-				while (src.length > 0 && isalpha(src[0])) {
-					ident += src.shift();
-				}
+			// else if (isalpha(src[0])) {
+			// 	let ident = "";
+			// 	while (src.length > 0 && isalpha(src[0])) {
+			// 		ident += src.shift();
+			// 	}
 
-				// CHECK FOR RESERVED KEYWORDS
-				const reserved = KEYWORDS[ident];
-				// If value is not undefined then the identifier is
-				// reconized keyword
-				if (typeof reserved == "number") {
-					tokens.push(token(ident, reserved));
-				} else {
-					// Unreconized name must mean user defined symbol.
-					tokens.push(token(ident, TokenType.Identifier));
+			// 	// CHECK FOR RESERVED KEYWORDS
+			// 	const reserved = KEYWORDS[ident];
+			// 	// If value is not undefined then the identifier is
+			// 	// reconized keyword
+			// 	if (typeof reserved == "number") {
+			// 		tokens.push(token(ident, reserved));
+			// 	} else {
+			// 		// Unreconized name must mean user defined symbol.
+			// 		tokens.push(token(ident, TokenType.Identifier));
+			// 	}
+			// } 
+			else if (isIdentifierChar(src[0])) {
+				// Build up an identifier (which can include punctuation you allow)
+				let ident = "";
+				while (src.length > 0 && isIdentifierChar(src[0])) {
+				  ident += src.shift();
 				}
-			} else if (isskippable(src[0])) {
+			  
+				// Check if it's a reserved keyword
+				const reserved = KEYWORDS[ident];
+				if (typeof reserved === "number") {
+				  tokens.push(token(ident, reserved));
+				} else {
+				  tokens.push(token(ident, TokenType.Identifier));
+				}
+			  }else if (isskippable(src[0])) {
 				// Skip uneeded chars.
 				src.shift();
 			} // Handle unreconized characters.

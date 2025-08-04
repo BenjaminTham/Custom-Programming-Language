@@ -26,6 +26,8 @@ function eval_numeric_binary_expr(
     result = lhs.value / rhs.value;
   } else if (operator == "<") {
     return { type: "boolean", value: lhs.value < rhs.value };
+  }else if (operator == ">") {
+    return { type: "boolean", value: lhs.value > rhs.value };
   }
   else {
     result = lhs.value % rhs.value;

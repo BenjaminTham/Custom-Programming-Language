@@ -1,4 +1,4 @@
-import { BooleanVal, MK_BOOL, MK_NATIVE_FN, MK_NULL, MK_NUMBER, NumberVal, RuntimeVal, StringVal } from "./values.ts";
+import { BooleanVal, MK_BOOL, MK_NATIVE_FN, MK_NULL, MK_NUMBER, MK_STRING, NumberVal, RuntimeVal, StringVal } from "./values.ts";
 
 // A utility function that returns the string representation 
 // for ANY possible RuntimeVal.
@@ -28,12 +28,12 @@ export function createGlobalEnv(){
   env.declareVar("null", MK_NULL(),true)
 
   env.declareVar("print",MK_NATIVE_FN((args, scope)=>{ console.log(...args.map(runtimeValToString)); return MK_NULL();}),true)
-  env.declareVar("chat",MK_NATIVE_FN((args, scope)=>{ console.log(...args.map(runtimeValToString)); return MK_NULL();}),true)
+  env.declareVar("oi",MK_NATIVE_FN((args, scope)=>{ console.log(...args.map(runtimeValToString)); return MK_NULL();}),true)
 
   function timeFunction(args:RuntimeVal[],env:Environment){
-    return MK_NUMBER(Date.now());
+    return MK_STRING(new Date().toString());
   }
-  env.declareVar("time",MK_NATIVE_FN(timeFunction),true);
+  env.declareVar("whattimeoredi",MK_NATIVE_FN(timeFunction),true);
 
   return env;
 }
@@ -95,4 +95,8 @@ export default class Environment {
 
     return this.parent.resolve(varname);
   }
+
+  
+
 }
+ 
